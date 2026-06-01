@@ -1,8 +1,22 @@
 const XLSX = require("xlsx");
 const fs = require("fs");
 
+// The Excel file path is passed as the first CLI argument, e.g.
+//   node convert.js ../../../../../project-tasks/staging/<repo-name>/marking_scheme.xlsx
+const inputPath = process.argv[2];
+
+if (!inputPath) {
+  console.error("Usage: node convert.js <path-to-marking_scheme.xlsx>");
+  process.exit(1);
+}
+
+if (!fs.existsSync(inputPath)) {
+  console.error(`Excel file not found: ${inputPath}`);
+  process.exit(1);
+}
+
 // Read the Excel file
-const workbook = XLSX.readFile("../../../test-projects/project-task-to-update/marking_scheme.xlsx");
+const workbook = XLSX.readFile(inputPath);
 
 // Get sheet names
 const sheetNames = workbook.SheetNames;

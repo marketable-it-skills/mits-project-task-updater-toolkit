@@ -1,11 +1,8 @@
 {
-  "totalMark": 30,
+  "totalMark": 70,
   "wsosSections": {
-    "1": "Work organization and self-management",
-    "2": "Communication and interpersonal skills",
-    "3": "Design Implementation",
-    "4": "Front-End Development",
-    "5": "Back-End Development"
+    "1": "R3",
+    "A": "Interactive Game"
   },
   "subCriterions": [
     {
@@ -32,7 +29,7 @@
           "type": "measurement",
           "description": "Start Screen implemented",
           "maxMark": 1.5,
-          "wsosSection": 3,
+          "wsosSection": 1,
           "extraDescription": "Test: Load the application. Verify the view contains the game title, instructions (movement and pause), and the 'Start Learning Path' button.",
           "calculation": {
             "type": "pass-or-fail"
@@ -41,8 +38,8 @@
         {
           "type": "measurement",
           "description": "Game Over Screen implemented",
-          "maxMark": 1.0,
-          "wsosSection": 3,
+          "maxMark": 1,
+          "wsosSection": 1,
           "extraDescription": "Test: Intentionally die in the game. Verify the Game Over screen displays the final score (Certificates Earned) and a button to restart.",
           "calculation": {
             "type": "pass-or-fail"
@@ -51,8 +48,8 @@
         {
           "type": "measurement",
           "description": "Game Over Context Feedback",
-          "maxMark": 1.0,
-          "wsosSection": 2,
+          "maxMark": 1,
+          "wsosSection": 1,
           "extraDescription": "Test: Die by hitting a wall, check that the text explicitly says 'Burnout'. Restart and die by hitting the tail, check that the text explicitly says 'Spaghetti Code'.",
           "calculation": {
             "type": "pass-or-fail"
@@ -62,7 +59,7 @@
           "type": "measurement",
           "description": "HUD fully implemented",
           "maxMark": 1.5,
-          "wsosSection": 3,
+          "wsosSection": 1,
           "extraDescription": "Test: Look at the top bar during gameplay. Verify all three statistics are visible: Certificates Earned, Developer Level, and Best Run.",
           "calculation": {
             "type": "pass-or-fail"
@@ -72,7 +69,7 @@
           "type": "measurement",
           "description": "Developer Level calculation explained in UI",
           "maxMark": 0.5,
-          "wsosSection": 2,
+          "wsosSection": 1,
           "extraDescription": "Test: Look at the HUD. Verify there is visible text or a tooltip explaining the formula for how the Developer Level is calculated.",
           "calculation": {
             "type": "pass-or-fail"
@@ -81,8 +78,8 @@
         {
           "type": "measurement",
           "description": "Responsive layout without breakage",
-          "maxMark": 1.0,
-          "wsosSection": 3,
+          "maxMark": 1,
+          "wsosSection": 1,
           "extraDescription": "Test: Resize the browser window width down to 375px. Verify that the layout adapts without horizontal scrolling and the game board remains visually intact.",
           "calculation": {
             "type": "pass-or-fail"
@@ -91,8 +88,8 @@
         {
           "type": "judgement",
           "description": "Overall Theme and Visual Design",
-          "maxMark": 2.0,
-          "wsosSection": 3,
+          "maxMark": 2,
+          "wsosSection": 1,
           "judgementScoreDescription": [
             "Design ignores the SkillShare Academy theme, using generic or default styling with poor contrast.",
             "Design applies basic theme colors but lacks polish, hierarchy, or visual cohesion.",
@@ -109,7 +106,7 @@
           "type": "measurement",
           "description": "Game event CSS animation or transition implemented",
           "maxMark": 1.5,
-          "wsosSection": 3,
+          "wsosSection": 1,
           "extraDescription": "Test: Play the game. Verify that at least ONE CSS animation or transition occurs (e.g., pulse on collection, shake on game over, fade-in on a menu).",
           "calculation": {
             "type": "pass-or-fail"
@@ -123,8 +120,8 @@
         {
           "type": "measurement",
           "description": "20x20 Grid Implementation",
-          "maxMark": 1.0,
-          "wsosSection": 4,
+          "maxMark": 1,
+          "wsosSection": 1,
           "extraDescription": "Test: Inspect the game board using DevTools or count manually. Verify it is a finite grid of exactly 20x20 cells using either CSS Grid or Canvas.",
           "calculation": {
             "type": "pass-or-fail"
@@ -134,7 +131,7 @@
           "type": "measurement",
           "description": "Entity Visual Distinction",
           "maxMark": 1.5,
-          "wsosSection": 4,
+          "wsosSection": 1,
           "extraDescription": "Test: Start the game and grow the snake. Verify the Student (head), Knowledge Base (body), and IT Skill (food) are clearly distinguishable from one another.",
           "calculation": {
             "type": "pass-or-fail"
@@ -149,7 +146,7 @@
           "type": "measurement",
           "description": "Automatic movement (Game Loop)",
           "maxMark": 1.5,
-          "wsosSection": 4,
+          "wsosSection": 1,
           "extraDescription": "Test: Click 'Start Learning Path'. Verify the Student automatically moves one cell per tick without holding any keyboard input.",
           "calculation": {
             "type": "pass-or-fail"
@@ -158,8 +155,8 @@
         {
           "type": "measurement",
           "description": "Keyboard Directional Controls",
-          "maxMark": 1.0,
-          "wsosSection": 4,
+          "maxMark": 1,
+          "wsosSection": 1,
           "extraDescription": "Test: Play the game using physical Arrow Keys and WASD keys. Verify both control schemes correctly change the Student's direction of movement.",
           "calculation": {
             "type": "pass-or-fail"
@@ -169,7 +166,7 @@
           "type": "measurement",
           "description": "Illegal Reversal Prevention",
           "maxMark": 1.5,
-          "wsosSection": 4,
+          "wsosSection": 1,
           "extraDescription": "Test: While moving RIGHT, immediately press LEFT. Verify the input is completely ignored and the snake does NOT instantly reverse into itself.",
           "calculation": {
             "type": "pass-or-fail"
@@ -178,8 +175,8 @@
         {
           "type": "measurement",
           "description": "Pause Toggle (Spacebar)",
-          "maxMark": 1.0,
-          "wsosSection": 4,
+          "maxMark": 1,
+          "wsosSection": 1,
           "extraDescription": "Test: While moving, press Space to verify the game loop stops completely. Press Space again to verify it resumes.",
           "calculation": {
             "type": "pass-or-fail"
@@ -188,8 +185,8 @@
         {
           "type": "measurement",
           "description": "Pause UI Overlay",
-          "maxMark": 1.0,
-          "wsosSection": 3,
+          "maxMark": 1,
+          "wsosSection": 1,
           "extraDescription": "Test: Press Space to pause. Verify a modal or overlay appears explicitly indicating the game is paused.",
           "calculation": {
             "type": "pass-or-fail"
@@ -204,7 +201,7 @@
           "type": "measurement",
           "description": "Wall Collision detection (Burnout)",
           "maxMark": 1.5,
-          "wsosSection": 4,
+          "wsosSection": 1,
           "extraDescription": "Test: Navigate the Student directly into the outer boundary of the grid. Verify the game ends immediately.",
           "calculation": {
             "type": "pass-or-fail"
@@ -214,7 +211,7 @@
           "type": "measurement",
           "description": "Self-Collision detection (Spaghetti Code)",
           "maxMark": 1.5,
-          "wsosSection": 4,
+          "wsosSection": 1,
           "extraDescription": "Test: Grow a tail. Drive the Student into its own tail. Verify the game ends immediately.",
           "calculation": {
             "type": "pass-or-fail"
@@ -223,8 +220,8 @@
         {
           "type": "measurement",
           "description": "Clean State Reset on Restart",
-          "maxMark": 1.0,
-          "wsosSection": 4,
+          "maxMark": 1,
+          "wsosSection": 1,
           "extraDescription": "Test: Trigger a Game Over and click 'Restart'. Verify Certificates reset to 0, Developer Level resets, the Knowledge Base shrinks back, and the game loop starts over.",
           "calculation": {
             "type": "pass-or-fail"
@@ -239,7 +236,7 @@
           "type": "measurement",
           "description": "Skill Collection Updates (Score & Tail)",
           "maxMark": 1.5,
-          "wsosSection": 4,
+          "wsosSection": 1,
           "extraDescription": "Test: Navigate into an IT Skill. Verify Certificates Earned increases by 1 AND the snake body visibly grows by 1 segment.",
           "calculation": {
             "type": "pass-or-fail"
@@ -248,8 +245,8 @@
         {
           "type": "measurement",
           "description": "Safe Item Spawning",
-          "maxMark": 1.0,
-          "wsosSection": 4,
+          "maxMark": 1,
+          "wsosSection": 1,
           "extraDescription": "Test: Collect an IT Skill. Verify a new skill instantly appears on the board and does NOT overlap with the Student or the existing tail.",
           "calculation": {
             "type": "pass-or-fail"
@@ -259,7 +256,7 @@
           "type": "measurement",
           "description": "Developer Level calculation accuracy",
           "maxMark": 1.5,
-          "wsosSection": 4,
+          "wsosSection": 1,
           "extraDescription": "Test: Collect IT Skills. Verify level math matches: 0-1 certificates = Level 1. Upon collecting the 2nd certificate, Level jumps to 2. Upon 4th, jumps to 3.",
           "calculation": {
             "type": "pass-or-fail"
@@ -273,8 +270,8 @@
         {
           "type": "measurement",
           "description": "Best Run saved to localStorage",
-          "maxMark": 1.0,
-          "wsosSection": 4,
+          "maxMark": 1,
+          "wsosSection": 1,
           "extraDescription": "Test: Score exactly 3 points. Trigger Game Over. Open DevTools -> Application -> Local Storage. Verify a key storing the high score is updated.",
           "calculation": {
             "type": "pass-or-fail"
@@ -283,8 +280,8 @@
         {
           "type": "measurement",
           "description": "Best Run restored on reload",
-          "maxMark": 1.0,
-          "wsosSection": 4,
+          "maxMark": 1,
+          "wsosSection": 1,
           "extraDescription": "Test: Ensure a Best Run > 0 is saved. Refresh the browser page. Verify the 'Best Run' in the HUD successfully loads and displays the saved value.",
           "calculation": {
             "type": "pass-or-fail"

@@ -1,0 +1,12 @@
+{
+  "name": "marking-scheme-json-to-xlsx",
+  "version": "1.0.0",
+  "description": "Convert MITS marking scheme JSON to the competition XLSX template",
+  "main": "convert-marking-scheme-to-xlsx.js",
+  "bin": {
+    "convert-marking-scheme-to-xlsx": "convert-marking-scheme-to-xlsx.js"
+  },
+  "dependencies": {
+    "xlsx": "^0.18.5"
+  }
+}
