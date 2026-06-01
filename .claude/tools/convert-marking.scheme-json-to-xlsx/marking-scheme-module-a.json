@@ -1,0 +1,149 @@
+{
+  "totalMark": 9,
+  "wsosSections": {
+    "1": "Work organization and self-management",
+    "2": "Communication and interpersonal skills",
+    "3": "Design Implementation",
+    "4": "Layout",
+    "5": "Front-End Development",
+    "6": "Back-End Development",
+    "7": "Content Management Systems"
+  },
+  "subCriterions": [
+    {
+      "name": "A1: CSS Heart Shape (Easy)",
+      "aspects": [
+        {
+          "type": "measurement",
+          "description": "Task work as described in the test project",
+          "maxMark": 0.5,
+          "wsosSection": 5,
+          "extraDescription": "",
+          "calculation": {
+            "type": "pass-or-fail"
+          }
+        }
+      ]
+    },
+    {
+      "name": "A2: Mac Taskbar Magnifying Animation (Medium)",
+      "aspects": [
+        {
+          "type": "measurement",
+          "description": "Task work as described in the test project",
+          "maxMark": 1,
+          "wsosSection": 5,
+          "extraDescription": "",
+          "calculation": {
+            "type": "pass-or-fail"
+          }
+        }
+      ]
+    },
+    {
+      "name": "A3: 3D Rubik's Cube (Hard)",
+      "aspects": [
+        {
+          "type": "measurement",
+          "description": "Task work as described in the test project",
+          "maxMark": 1.5,
+          "wsosSection": 5,
+          "extraDescription": "",
+          "calculation": {
+            "type": "pass-or-fail"
+          }
+        }
+      ]
+    },
+    {
+      "name": "B1: Picture in Picture (Easy)",
+      "aspects": [
+        {
+          "type": "measurement",
+          "description": "Task work as described in the test project",
+          "maxMark": 0.5,
+          "wsosSection": 5,
+          "extraDescription": "",
+          "calculation": {
+            "type": "pass-or-fail"
+          }
+        }
+      ]
+    },
+    {
+      "name": "B2: Follow the cursor (Medium)",
+      "aspects": [
+        {
+          "type": "measurement",
+          "description": "Task work as described in the test project",
+          "maxMark": 1,
+          "wsosSection": 5,
+          "extraDescription": "",
+          "calculation": {
+            "type": "pass-or-fail"
+          }
+        }
+      ]
+    },
+    {
+      "name": "B3: Drawing Tool (Hard)",
+      "aspects": [
+        {
+          "type": "measurement",
+          "description": "Task work as described in the test project",
+          "maxMark": 1.5,
+          "wsosSection": 5,
+          "extraDescription": "",
+          "calculation": {
+            "type": "pass-or-fail"
+          }
+        }
+      ]
+    },
+    {
+      "name": "C1: Top courses (Easy)",
+      "aspects": [
+        {
+          "type": "measurement",
+          "description": "Task work as described in the test project",
+          "maxMark": 0.5,
+          "wsosSection": 5,
+          "extraDescription": "",
+          "calculation": {
+            "type": "pass-or-fail"
+          }
+        }
+      ]
+    },
+    {
+      "name": "C2: Array chunking (Medium)",
+      "aspects": [
+        {
+          "type": "measurement",
+          "description": "Task work as described in the test project",
+          "maxMark": 1,
+          "wsosSection": 5,
+          "extraDescription": "",
+          "calculation": {
+            "type": "pass-or-fail"
+          }
+        }
+      ]
+    },
+    {
+      "name": "C3: Two numbers that add up (Hard)",
+      "aspects": [
+        {
+          "type": "measurement",
+          "description": "Task work as described in the test project",
+          "maxMark": 1.5,
+          "wsosSection": 5,
+          "extraDescription": "",
+          "calculation": {
+            "type": "pass-or-fail"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,542 @@
+{
+  "totalMark": 30,
+  "wsosSections": {
+    "1": "Work organization and self-management",
+    "2": "Communication and interpersonal skills",
+    "3": "Design Implementation",
+    "4": "Front-End Development",
+    "5": "Back-End Development"
+  },
+  "subCriterions": [
+    {
+      "name": "Project Setup and Deliverables",
+      "aspects": [
+        {
+          "type": "measurement",
+          "description": "Health check endpoint returns correct response",
+          "maxMark": 0.5,
+          "wsosSection": 1,
+          "extraDescription": "Test: GET /api/health returns 200 OK with body {\"status\": \"ok\"}. No authentication required. Automated test: 01-health-and-public.test.cjs › \"GET /health\".",
+          "calculation": { "type": "pass-or-fail" }
+        },
+        {
+          "type": "measurement",
+          "description": "Content service connects to and uses the provided database",
+          "maxMark": 0.25,
+          "wsosSection": 1,
+          "extraDescription": "Test: GET /api/courses returns course data from the provided database dump (not empty, not hardcoded). Verify at least one known course slug is present. Automated test: 01-health-and-public.test.cjs › \"GET /api/courses\" (also exercised in 03-course-catalog-and-details.test.cjs).",
+          "calculation": { "type": "pass-or-fail" }
+        },
+        {
+          "type": "measurement",
+          "description": "Database schema is not modified",
+          "maxMark": 0.25,
+          "wsosSection": 1,
+          "extraDescription": "Verify: After the competition, restore the original database dump and confirm the service still works correctly. Alternatively, inspect the database schema for any added, removed, or altered tables or columns.",
+          "calculation": { "type": "pass-or-fail" }
+        }
+      ]
+    },
+    {
+      "name": "Error Handling and User Communication",
+      "aspects": [
+        {
+          "type": "measurement",
+          "description": "All error responses return JSON with at least an error and code field",
+          "maxMark": 0.5,
+          "wsosSection": 2,
+          "extraDescription": "Test: Trigger any error (e.g. GET /api/courses/nonexistent-slug with valid token). Verify response body contains both error (human-readable message) and code (machine-readable string, e.g. COURSE_NOT_FOUND) fields. Automated snapshot coverage: 02-auth-and-errors.test.cjs (e.g. 404 course, 401 cases), 06-course-administration.test.cjs (validation errors), 07-api-compliance.test.cjs (error response Content-Type).",
+          "calculation": { "type": "pass-or-fail" }
+        },
+        {
+          "type": "measurement",
+          "description": "401 Unauthorized returned when Bearer token is missing",
+          "maxMark": 0.5,
+          "wsosSection": 2,
+          "extraDescription": "Test: Send GET /api/courses/{valid-slug} with no Authorization header. Verify response is 401 with {\"error\": \"Unauthorized\", \"code\": \"UNAUTHORIZED\"}. Automated test: 02-auth-and-errors.test.cjs › \"All content endpoints (except /health and GET /api/courses) require Bearer token\".",
+          "calculation": { "type": "pass-or-fail" }
+        },
+        {
+          "type": "measurement",
+          "description": "401 Unauthorized returned for invalid or malformed token",
+          "maxMark": 0.5,
+          "wsosSection": 2,
+          "extraDescription": "Test: Send GET /api/courses/{valid-slug} with Authorization: Bearer invalidtoken123. Verify 401 with code UNAUTHORIZED. Also test with a token signed with a wrong secret. Automated tests: 02-auth-and-errors.test.cjs › \"401 returned when token is invalid (garbage)\"; 02-auth-and-errors.test.cjs › \"401 returned for token signed with wrong secret (HMAC mismatch)\".",
+          "calculation": { "type": "pass-or-fail" }
+        },
+        {
+          "type": "measurement",
+          "description": "401 Unauthorized returned for an expired token",
+          "maxMark": 0.5,
+          "wsosSection": 2,
+          "extraDescription": "Test: Craft a valid token with an exp value in the past (e.g. exp: 1). Send it to a protected endpoint. Verify 401 with code UNAUTHORIZED. Automated test: 02-auth-and-errors.test.cjs › \"401 returned for expired token (valid signature but exp in the past)\".",
+          "calculation": { "type": "pass-or-fail" }
+        },
+        {
+          "type": "measurement",
+          "description": "403 Forbidden returned when user is not enrolled in the requested course",
+          "maxMark": 0.5,
+          "wsosSection": 2,
+          "extraDescription": "Test: Send GET /api/courses/{valid-slug} with a valid token for a user who is not enrolled in that course. Verify 403 with {\"error\": \"Not enrolled in this course\", \"code\": \"NOT_ENROLLED\"}. Automated test: 02-auth-and-errors.test.cjs › \"403 NOT_ENROLLED returned when user is not enrolled in requested course\".",
+          "calculation": { "type": "pass-or-fail" }
+        },
+        {
+          "type": "measurement",
+          "description": "403 Forbidden returned when a chapter is locked (previous chapter not completed)",
+          "maxMark": 0.25,
+          "wsosSection": 2,
+          "extraDescription": "Test: Enroll a user in a course, then request a chapter with orderIndex > 1 without having completed the previous chapter. Verify 403 with {\"error\": \"Previous chapter must be completed first\", \"code\": \"CHAPTER_LOCKED\"}. Not covered by marking/module-c/tests Jest suite — assess manually or add a one-off request.",
+          "calculation": { "type": "pass-or-fail" }
+        },
+        {
+          "type": "measurement",
+          "description": "404 Not Found returned for a non-existent course",
+          "maxMark": 0.25,
+          "wsosSection": 2,
+          "extraDescription": "Test: GET /api/courses/this-course-does-not-exist with a valid token. Verify 404 with {\"error\": \"Course not found\", \"code\": \"COURSE_NOT_FOUND\"}. Automated test: 02-auth-and-errors.test.cjs › \"404 returned for non-existent course\".",
+          "calculation": { "type": "pass-or-fail" }
+        },
+        {
+          "type": "measurement",
+          "description": "404 Not Found returned for a non-existent chapter",
+          "maxMark": 0.25,
+          "wsosSection": 2,
+          "extraDescription": "Test: GET /api/courses/{valid-slug}/chapters/99999 with a valid enrolled-user token. Verify 404 with {\"error\": \"Chapter not found\", \"code\": \"CHAPTER_NOT_FOUND\"}. Not covered by marking/module-c/tests Jest suite — assess manually.",
+          "calculation": { "type": "pass-or-fail" }
+        }
+      ]
+    },
+    {
+      "name": "Token Authentication",
+      "aspects": [
+        {
+          "type": "measurement",
+          "description": "Token structure is validated (must have exactly three parts: header.payload.signature)",
+          "maxMark": 0.5,
+          "wsosSection": 5,
+          "extraDescription": "Test: Send requests with malformed tokens: one-part (justpayload), two-part (header.payload), four-part (a.b.c.d). All must return 401 UNAUTHORIZED. Automated test: 02-auth-and-errors.test.cjs › \"401 returned when token is malformed (wrong part count)\".",
+          "calculation": { "type": "pass-or-fail" }
+        },
+        {
+          "type": "measurement",
+          "description": "HMAC-SHA256 signature is verified using the correct shared secret",
+          "maxMark": 1.0,
+          "wsosSection": 5,
+          "extraDescription": "Test: Create a valid token structure (correct exp, sub) but sign it with a different secret. Verify 401. Then sign with the correct secret (38344ac35d91bfd0c8f43963b0ca188d2a039504e825ff968b0366855bdbca5b) and verify 200. Automated test: 02-auth-and-errors.test.cjs › \"401 returned for token signed with wrong secret (HMAC mismatch)\" (failure case); success path covered by any enrolled GET in 03/04/07.",
+          "calculation": { "type": "pass-or-fail" }
+        },
+        {
+          "type": "measurement",
+          "description": "Token expiry (exp claim) is validated on every request",
+          "maxMark": 0.5,
+          "wsosSection": 5,
+          "extraDescription": "Test: Issue a token with exp set to now-1 (past). Verify 401. Issue a token with exp set to now+3600. Verify protected endpoint returns 200 (assuming enrolled user). Automated test: 02-auth-and-errors.test.cjs › \"401 returned for expired token (valid signature but exp in the past)\".",
+          "calculation": { "type": "pass-or-fail" }
+        },
+        {
+          "type": "measurement",
+          "description": "User ID is extracted from the sub claim of the token payload",
+          "maxMark": 0.5,
+          "wsosSection": 5,
+          "extraDescription": "Verify: The content service uses the sub value from the token payload as the user identifier when calling main backend endpoints (e.g. enrolled-courses, completed-chapters). Check by issuing tokens with different sub values and verifying enrollment/completion checks use the correct user ID. Not directly asserted in marking/module-c/tests — infer from correct per-user enrollment/completion in 03/04/05 or review code.",
+          "calculation": { "type": "pass-or-fail" }
+        },
+        {
+          "type": "measurement",
+          "description": "Token validation is performed locally without external JWT or auth libraries",
+          "maxMark": 0.5,
+          "wsosSection": 5,
+          "extraDescription": "Review: Inspect the submitted code (or package.json / requirements) for any JWT library imports (e.g. jsonwebtoken, passport-jwt, python-jose). The validation must be custom-implemented using a standard HMAC-SHA256 cryptographic library only. Not covered by automated HTTP tests — code review.",
+          "calculation": { "type": "pass-or-fail" }
+        },
+        {
+          "type": "measurement",
+          "description": "Token validated locally on every protected request (no caching or skipping)",
+          "maxMark": 0.5,
+          "wsosSection": 5,
+          "extraDescription": "Test: Make two requests with the same expired token to different protected endpoints. Both must return 401. Make two requests with the same valid token to different endpoints. Both must succeed. Verify no token is accepted based on session state. Partially aligned: 02-auth-and-errors.test.cjs (expired token); full matrix not a dedicated Jest case — spot-check if needed.",
+          "calculation": { "type": "pass-or-fail" }
+        }
+      ]
+    },
+    {
+      "name": "Course Catalog",
+      "aspects": [
+        {
+          "type": "measurement",
+          "description": "GET /api/courses returns all courses without authentication",
+          "maxMark": 0.5,
+          "wsosSection": 5,
+          "extraDescription": "Test: GET /api/courses with no Authorization header. Verify 200 OK with a courses array. Verify the response is not empty (uses the provided database data). Automated tests: 01-health-and-public.test.cjs › \"GET /api/courses\"; 03-course-catalog-and-details.test.cjs › \"GET /api/courses is public and returns required course fields\".",
+          "calculation": { "type": "pass-or-fail" }
+        },
+        {
+          "type": "measurement",
+          "description": "Course objects in list contain all required fields",
+          "maxMark": 0.5,
+          "wsosSection": 5,
+          "extraDescription": "Test: GET /api/courses. For each course in the courses array, verify the presence of: id (integer), slug (string), title (string), description (string), difficulty (beginner|intermediate|advanced), totalChapters (integer), totalCredits (integer). Automated test: 03-course-catalog-and-details.test.cjs › \"GET /api/courses is public and returns required course fields\".",
+          "calculation": { "type": "pass-or-fail" }
+        },
+        {
+          "type": "measurement",
+          "description": "Each course in the list includes a chapters array ordered by orderIndex",
+          "maxMark": 0.5,
+          "wsosSection": 5,
+          "extraDescription": "Test: GET /api/courses. For a course with multiple chapters, verify chapters array is present and items appear in ascending orderIndex order. Each chapter item must include id, title, credits, orderIndex. Automated test: 03-course-catalog-and-details.test.cjs › \"Each course includes chapters ordered by orderIndex with required fields\".",
+          "calculation": { "type": "pass-or-fail" }
+        },
+        {
+          "type": "measurement",
+          "description": "GET /api/courses/:slug returns single course details (Bearer token required)",
+          "maxMark": 0.5,
+          "wsosSection": 5,
+          "extraDescription": "Test: GET /api/courses/{valid-slug} with a valid token for an enrolled user. Verify 200 with a course object wrapped in a course key, including id, slug, title, difficulty, totalChapters, totalCredits, and a chapters array. Automated test: 03-course-catalog-and-details.test.cjs › \"GET /api/courses/:slug returns course details for an enrolled user\".",
+          "calculation": { "type": "pass-or-fail" }
+        },
+        {
+          "type": "measurement",
+          "description": "isCompleted flag for each chapter is fetched from the main backend",
+          "maxMark": 0.75,
+          "wsosSection": 5,
+          "extraDescription": "Test: Request GET /api/courses/{slug} for a user who has completed some chapters. Verify the chapters array includes isCompleted: true for completed chapters and isCompleted: false for incomplete ones. The data must match the main backend's /users/me/completed-chapters response. Automated snapshot shape: 03-course-catalog-and-details.test.cjs › \"GET /api/courses/:slug returns course details for an enrolled user\" (cross-check completion state against main backend if needed).",
+          "calculation": { "type": "pass-or-fail" }
+        },
+        {
+          "type": "measurement",
+          "description": "User enrollment is validated with the main backend before serving course details",
+          "maxMark": 0.75,
+          "wsosSection": 5,
+          "extraDescription": "Test: Request GET /api/courses/{slug} with a valid token for a user not enrolled in that course. Verify 403 NOT_ENROLLED. Confirm the enrollment check uses the main backend /users/me/enrolled-courses endpoint. Automated test: 02-auth-and-errors.test.cjs › \"403 NOT_ENROLLED returned when user is not enrolled in requested course\".",
+          "calculation": { "type": "pass-or-fail" }
+        }
+      ]
+    },
+    {
+      "name": "Chapter and Content Delivery",
+      "aspects": [
+        {
+          "type": "measurement",
+          "description": "GET /api/courses/:slug/chapters/:chapterId returns chapter metadata",
+          "maxMark": 0.5,
+          "wsosSection": 5,
+          "extraDescription": "Test: GET /api/courses/{slug}/chapters/{id} for an accessible chapter. Verify response includes courseId, chapterId, title, description, and credits fields. Automated tests: 04-chapter-content.test.cjs › \"First chapter (orderIndex 1) is accessible for enrolled users\"; 04-chapter-content.test.cjs › \"Chapter content includes metadata, ordered content blocks, and quiz (no correct answers exposed)\".",
+          "calculation": { "type": "pass-or-fail" }
+        },
+        {
+          "type": "measurement",
+          "description": "Content blocks are returned in orderIndex order",
+          "maxMark": 0.5,
+          "wsosSection": 5,
+          "extraDescription": "Test: GET a chapter with multiple content blocks. Verify the content array items are ordered by ascending orderIndex. Verify each item exposes an orderIndex field matching its position. Automated test: 04-chapter-content.test.cjs › \"Chapter content includes metadata, ordered content blocks, and quiz (no correct answers exposed)\".",
+          "calculation": { "type": "pass-or-fail" }
+        },
+        {
+          "type": "measurement",
+          "description": "Heading blocks (h1-h4) are returned with correct type and text fields",
+          "maxMark": 0.5,
+          "wsosSection": 5,
+          "extraDescription": "Test: GET a chapter containing h1, h2, h3, or h4 blocks. Verify each heading item has type (\"h1\"/\"h2\"/\"h3\"/\"h4\") and text (the heading content from the text column). Automated test: 04-chapter-content.test.cjs › \"Chapter content includes metadata, ordered content blocks, and quiz (no correct answers exposed)\".",
+          "calculation": { "type": "pass-or-fail" }
+        },
+        {
+          "type": "measurement",
+          "description": "Paragraph and list_item blocks are assembled from chunks into HTML",
+          "maxMark": 2.0,
+          "wsosSection": 5,
+          "extraDescription": "Test: GET a chapter with paragraph and list_item blocks that have associated chunks. Verify: (1) the html field is present and contains rendered HTML; (2) bold chunks are wrapped in <strong>; (3) italic chunks are wrapped in <em>; (4) paragraphs produce <p>...</p>; (5) list_item blocks produce <li>...</li>. Chunk rows must not appear directly in the response. Automated test: 04-chapter-content.test.cjs › \"Paragraph and list_item blocks include html + rawText and render chunks into <strong>/<em>\".",
+          "calculation": { "type": "pass-or-fail" }
+        },
+        {
+          "type": "measurement",
+          "description": "rawText field is included for paragraph and list_item blocks",
+          "maxMark": 0.5,
+          "wsosSection": 5,
+          "extraDescription": "Test: GET a chapter with paragraph/list_item blocks. Verify each such block has a rawText field (may be null if raw_text column is null; must not be omitted entirely). Automated test: 04-chapter-content.test.cjs › \"Paragraph and list_item blocks include html + rawText and render chunks into <strong>/<em>\".",
+          "calculation": { "type": "pass-or-fail" }
+        },
+        {
+          "type": "measurement",
+          "description": "Image blocks are returned with url and alt fields",
+          "maxMark": 0.5,
+          "wsosSection": 5,
+          "extraDescription": "Test: GET a chapter containing an image block. Verify the item has type \"image\", a url (from the url column), and an alt field (from img_alt column). No extraneous fields from other block types. Automated test: 04-chapter-content.test.cjs › \"Image/video/link blocks have required fields\".",
+          "calculation": { "type": "pass-or-fail" }
+        },
+        {
+          "type": "measurement",
+          "description": "Video blocks are returned with url and title fields",
+          "maxMark": 0.25,
+          "wsosSection": 5,
+          "extraDescription": "Test: GET a chapter containing a video block. Verify the item has type \"video\", a url, and a title field. No raw text or heading fields. Automated test: 04-chapter-content.test.cjs › \"Image/video/link blocks have required fields\".",
+          "calculation": { "type": "pass-or-fail" }
+        },
+        {
+          "type": "measurement",
+          "description": "Link blocks are returned with url and title fields",
+          "maxMark": 0.25,
+          "wsosSection": 5,
+          "extraDescription": "Test: GET a chapter containing a link block. Verify the item has type \"link\", a url, and a title field. Automated test: 04-chapter-content.test.cjs › \"Image/video/link blocks have required fields\".",
+          "calculation": { "type": "pass-or-fail" }
+        },
+        {
+          "type": "measurement",
+          "description": "Quiz is included in the chapter response with questions and options (no correct answers exposed)",
+          "maxMark": 1.0,
+          "wsosSection": 5,
+          "extraDescription": "Test: GET a chapter with a quiz. Verify: (1) response contains a quiz.questions array; (2) each question has id, text, and options array; (3) each option has id and text; (4) isCorrect is NOT present in any option object. Exposing isCorrect is a critical failure. Automated test: 04-chapter-content.test.cjs › \"Chapter content includes metadata, ordered content blocks, and quiz (no correct answers exposed)\".",
+          "calculation": { "type": "pass-or-fail" }
+        },
+        {
+          "type": "measurement",
+          "description": "credits field is included in the chapter response",
+          "maxMark": 0.25,
+          "wsosSection": 5,
+          "extraDescription": "Test: GET a chapter. Verify the response root includes a credits field (integer) matching the chapter's credit value from the database. Automated tests: 04-chapter-content.test.cjs (chapter GET snapshots, e.g. \"First chapter...\" / \"Chapter content includes metadata...\").",
+          "calculation": { "type": "pass-or-fail" }
+        },
+        {
+          "type": "measurement",
+          "description": "Correct answers (isCorrect) are never exposed to clients in any response",
+          "maxMark": 0.25,
+          "wsosSection": 5,
+          "extraDescription": "Test: GET /api/courses/{slug}/chapters/{id}. Inspect every option object in the quiz.questions array. Verify that no option contains an isCorrect, correct, answer, or similar field. This is a strict security requirement. Automated test: 04-chapter-content.test.cjs › \"Chapter content includes metadata, ordered content blocks, and quiz (no correct answers exposed)\".",
+          "calculation": { "type": "pass-or-fail" }
+        }
+      ]
+    },
+    {
+      "name": "Sequential Access Control",
+      "aspects": [
+        {
+          "type": "measurement",
+          "description": "First chapter (orderIndex 1) is always accessible for enrolled users",
+          "maxMark": 0.5,
+          "wsosSection": 5,
+          "extraDescription": "Test: GET the first chapter (orderIndex 1) of a course using a valid enrolled-user token with no completed chapters. Verify 200 OK (not 403 CHAPTER_LOCKED). Automated test: 04-chapter-content.test.cjs › \"First chapter (orderIndex 1) is accessible for enrolled users\".",
+          "calculation": { "type": "pass-or-fail" }
+        },
+        {
+          "type": "measurement",
+          "description": "Chapters with orderIndex > 1 are locked if the previous chapter is not completed",
+          "maxMark": 0.75,
+          "wsosSection": 5,
+          "extraDescription": "Test: GET a chapter with orderIndex 2 or higher for an enrolled user who has not completed the preceding chapter. Verify 403 with {\"error\": \"Previous chapter must be completed first\", \"code\": \"CHAPTER_LOCKED\"}. Then mark the previous chapter complete and retry - verify 200. Not covered by marking/module-c/tests Jest suite — assess manually.",
+          "calculation": { "type": "pass-or-fail" }
+        },
+        {
+          "type": "measurement",
+          "description": "Previous chapter completion is fetched from the main backend",
+          "maxMark": 0.25,
+          "wsosSection": 5,
+          "extraDescription": "Verify: The content service calls the main backend /users/me/completed-chapters endpoint to determine whether the previous chapter is completed. It must not store completion state itself. Test by completing chapter 1 via the main backend and confirming chapter 2 becomes accessible in the content service. Not covered by marking/module-c/tests Jest suite — manual cross-check with main backend.",
+          "calculation": { "type": "pass-or-fail" }
+        }
+      ]
+    },
+    {
+      "name": "Quiz Validation",
+      "aspects": [
+        {
+          "type": "measurement",
+          "description": "POST .../quiz/validate accepts and processes an answers array",
+          "maxMark": 0.75,
+          "wsosSection": 5,
+          "extraDescription": "Test: POST /api/courses/{slug}/chapters/{id}/quiz/validate with body {\"answers\": [{\"questionId\": 1, \"selectedOptionId\": \"a\"},...]}. Verify the endpoint accepts the request and returns a response (not 400/404). Automated test: 05-quiz-validate.test.cjs › \"POST .../quiz/validate accepts answers array and returns passed true for correct answers\".",
+          "calculation": { "type": "pass-or-fail" }
+        },
+        {
+          "type": "measurement",
+          "description": "Returns {\"passed\": true} when all submitted answers are correct",
+          "maxMark": 0.5,
+          "wsosSection": 5,
+          "extraDescription": "Test: Submit all correct answers for a chapter quiz. Verify response is 200 OK with body {\"passed\": true}. Automated test: 05-quiz-validate.test.cjs › \"POST .../quiz/validate accepts answers array and returns passed true for correct answers\".",
+          "calculation": { "type": "pass-or-fail" }
+        },
+        {
+          "type": "measurement",
+          "description": "Returns {\"passed\": false} when one or more answers are incorrect",
+          "maxMark": 0.5,
+          "wsosSection": 5,
+          "extraDescription": "Test: Submit at least one wrong answer for a chapter quiz. Verify response is 200 OK with body {\"passed\": false}. Not covered by marking/module-c/tests Jest suite — assess manually (07-api-compliance uses wrong options for status snapshot only).",
+          "calculation": { "type": "pass-or-fail" }
+        },
+        {
+          "type": "measurement",
+          "description": "Correct answers validated against quiz_options.isCorrect in the database",
+          "maxMark": 0.5,
+          "wsosSection": 5,
+          "extraDescription": "Verify: Cross-reference submitted answers with the is_correct column in the quiz_options table. The content service must check all answers - passing requires every answer to match the correct option, not just the first or majority. Partially supported: 05-quiz-validate.test.cjs (all-correct path); full DB cross-check manual.",
+          "calculation": { "type": "pass-or-fail" }
+        },
+        {
+          "type": "measurement",
+          "description": "On a passing quiz, the content service notifies the main backend chapter completion endpoint",
+          "maxMark": 0.75,
+          "wsosSection": 5,
+          "extraDescription": "Test: Submit all correct answers for a chapter. Verify that after the call, the chapter appears as completed in the main backend (check via main backend /users/me/completed-chapters). The content service must call POST /courses/:id/chapters/:id/complete on the main backend. Not asserted in marking/module-c/tests — verify manually after 05-quiz-validate run.",
+          "calculation": { "type": "pass-or-fail" }
+        }
+      ]
+    },
+    {
+      "name": "Course Administration",
+      "aspects": [
+        {
+          "type": "measurement",
+          "description": "POST /api/courses creates a new course with required fields (title, slug)",
+          "maxMark": 0.5,
+          "wsosSection": 5,
+          "extraDescription": "Test: POST /api/courses with {\"title\": \"Test Course\", \"slug\": \"test-course\"} and a valid Bearer token. Verify the course is created and persisted (retrievable via GET /api/courses). Automated test: 06-course-administration.test.cjs › \"POST /api/courses creates a new course and returns 201 with initialized fields\".",
+          "calculation": { "type": "pass-or-fail" }
+        },
+        {
+          "type": "measurement",
+          "description": "POST /api/courses returns 201 Created with the course object",
+          "maxMark": 0.25,
+          "wsosSection": 5,
+          "extraDescription": "Test: POST /api/courses with valid data. Verify status 201 and response body contains a course object with id, slug, title, description, difficulty, totalChapters (0), totalCredits (0), and empty chapters array. Automated test: 06-course-administration.test.cjs › \"POST /api/courses creates a new course and returns 201 with initialized fields\".",
+          "calculation": { "type": "pass-or-fail" }
+        },
+        {
+          "type": "measurement",
+          "description": "Slug format is validated (lowercase letters, digits, hyphens only)",
+          "maxMark": 0.75,
+          "wsosSection": 5,
+          "extraDescription": "Test: POST /api/courses with slugs containing invalid characters: \"My Course\" (space), \"UPPER\", \"special@char\". All must return 400 with code INVALID_COURSE_SLUG. Test a valid slug like \"my-new-course-2\" returns 201. Automated test: 06-course-administration.test.cjs › \"POST validates slug format and rejects invalid slugs\".",
+          "calculation": { "type": "pass-or-fail" }
+        },
+        {
+          "type": "measurement",
+          "description": "Duplicate slug is rejected with 409 Conflict",
+          "maxMark": 0.5,
+          "wsosSection": 5,
+          "extraDescription": "Test: Create a course with slug \"test-course\". Then POST again with the same slug. Verify 409 with code DUPLICATE_COURSE_SLUG. Automated test: 06-course-administration.test.cjs › \"POST rejects duplicate slug with 409\".",
+          "calculation": { "type": "pass-or-fail" }
+        },
+        {
+          "type": "measurement",
+          "description": "Optional fields (description, difficulty) are handled in POST /api/courses",
+          "maxMark": 0.5,
+          "wsosSection": 5,
+          "extraDescription": "Test: POST with difficulty: \"intermediate\" and description: \"A test desc\". Verify these appear in the response. Test invalid difficulty value returns 400. Test omitting description sets it to null. Automated test: 06-course-administration.test.cjs › \"POST handles optional fields (description, difficulty) and validates difficulty\".",
+          "calculation": { "type": "pass-or-fail" }
+        },
+        {
+          "type": "measurement",
+          "description": "New course is initialized with totalChapters: 0, totalCredits: 0, chapters: []",
+          "maxMark": 0.25,
+          "wsosSection": 5,
+          "extraDescription": "Test: POST /api/courses with valid data. Verify the response course object has totalChapters: 0, totalCredits: 0, and chapters: [] (empty array). Automated test: 06-course-administration.test.cjs › \"POST /api/courses creates a new course and returns 201 with initialized fields\".",
+          "calculation": { "type": "pass-or-fail" }
+        },
+        {
+          "type": "measurement",
+          "description": "PUT /api/courses/:id updates course metadata",
+          "maxMark": 0.5,
+          "wsosSection": 5,
+          "extraDescription": "Test: PUT /api/courses/{id} with {\"title\": \"Updated Title\"}. Verify 200 OK and the response course object contains the updated title. Verify the change persists (GET /api/courses returns the new title). Automated test: 06-course-administration.test.cjs › \"PUT /api/courses/:id updates metadata and recomputes totals\".",
+          "calculation": { "type": "pass-or-fail" }
+        },
+        {
+          "type": "measurement",
+          "description": "Partial updates are supported in PUT (only supplied fields are updated)",
+          "maxMark": 0.5,
+          "wsosSection": 5,
+          "extraDescription": "Test: PUT /api/courses/{id} with only {\"slug\": \"new-valid-slug\"}. Verify only slug is changed and other fields (title, description, difficulty) remain unchanged. Also verify that an empty body returns 400. Automated test: 06-course-administration.test.cjs › \"PUT supports partial updates and rejects empty body\".",
+          "calculation": { "type": "pass-or-fail" }
+        },
+        {
+          "type": "measurement",
+          "description": "totalChapters and totalCredits are recomputed from chapter data after PUT",
+          "maxMark": 0.5,
+          "wsosSection": 5,
+          "extraDescription": "Verify: After a successful PUT, the response and subsequent GET include totalChapters and totalCredits values recomputed from the chapters table - not the stale values from before the update. Automated snapshot: 06-course-administration.test.cjs › \"PUT /api/courses/:id updates metadata and recomputes totals\".",
+          "calculation": { "type": "pass-or-fail" }
+        },
+        {
+          "type": "measurement",
+          "description": "PUT /api/courses/:id returns 200 with updated course and chapters summary",
+          "maxMark": 0.25,
+          "wsosSection": 5,
+          "extraDescription": "Test: PUT /api/courses/{id} with valid data. Verify 200 OK and response contains a course object with a chapters array (summaries in orderIndex order, same shape as GET /api/courses). Automated tests: 06-course-administration.test.cjs › \"PUT /api/courses/:id updates metadata and recomputes totals\"; \"PUT supports partial updates and rejects empty body\".",
+          "calculation": { "type": "pass-or-fail" }
+        },
+        {
+          "type": "measurement",
+          "description": "400 returned for invalid payload or missing required fields in course administration",
+          "maxMark": 0.25,
+          "wsosSection": 5,
+          "extraDescription": "Test: POST /api/courses with missing title or missing slug returns 400 with code INVALID_COURSE_PAYLOAD. PUT /api/courses/{id} with invalid difficulty returns 400 with INVALID_DIFFICULTY. PUT with non-numeric id returns 400 with INVALID_ID_FORMAT. Automated snapshots: 06-course-administration.test.cjs (optional fields / bad difficulty); invalid POST payload may require manual spot-check if not in snapshots.",
+          "calculation": { "type": "pass-or-fail" }
+        },
+        {
+          "type": "measurement",
+          "description": "404 returned when course ID does not exist in PUT /api/courses/:id",
+          "maxMark": 0.25,
+          "wsosSection": 5,
+          "extraDescription": "Test: PUT /api/courses/99999 (an ID that does not exist) with a valid Bearer token and a valid request body. Verify 404 with code COURSE_NOT_FOUND. Automated test: 06-course-administration.test.cjs › \"PUT returns 404 for non-existent course id\".",
+          "calculation": { "type": "pass-or-fail" }
+        }
+      ]
+    },
+    {
+      "name": "API Compliance and Response Quality",
+      "aspects": [
+        {
+          "type": "measurement",
+          "description": "All responses include Content-Type: application/json header",
+          "maxMark": 0.25,
+          "wsosSection": 5,
+          "extraDescription": "Test: Check the Content-Type response header on at least three different endpoints (GET /api/health, GET /api/courses, and one error response). All must include application/json. Automated test: 07-api-compliance.test.cjs › \"Responses include Content-Type: application/json (health, courses, error)\".",
+          "calculation": { "type": "pass-or-fail" }
+        },
+        {
+          "type": "measurement",
+          "description": "Bearer token is correctly parsed from the Authorization header",
+          "maxMark": 0.25,
+          "wsosSection": 5,
+          "extraDescription": "Test: Send a request with Authorization: Bearer <valid-token>. Verify it succeeds. Send Authorization: <token> without the Bearer prefix. Verify 401. Send the token in a non-standard header (e.g. X-Token). Verify 401. Automated test: 07-api-compliance.test.cjs › \"Authorization header must use Bearer prefix\".",
+          "calculation": { "type": "pass-or-fail" }
+        },
+        {
+          "type": "measurement",
+          "description": "Correct HTTP success status codes used (200 for GET/PUT, 201 for POST course creation)",
+          "maxMark": 0.75,
+          "wsosSection": 5,
+          "extraDescription": "Test: Verify GET /api/courses returns 200, GET /api/courses/:slug returns 200, GET /api/courses/:slug/chapters/:id returns 200, POST /api/courses returns 201, PUT /api/courses/:id returns 200, POST .../quiz/validate returns 200. Automated test: 07-api-compliance.test.cjs › \"Correct success status codes used (200 for GET/PUT, 201 for POST create)\".",
+          "calculation": { "type": "pass-or-fail" }
+        },
+        {
+          "type": "judgement",
+          "description": "Overall API response quality and adherence to the OpenAPI specification",
+          "maxMark": 0.75,
+          "wsosSection": 5,
+          "judgementScoreDescription": [
+            "Responses deviate significantly from the OpenAPI spec: missing required fields, incorrect data types, wrong nesting structure, or extra fields that should not appear (e.g. isCorrect exposed)",
+            "Responses partially match the OpenAPI spec with minor structural issues: some fields missing or incorrectly named, but core structure is recognizable",
+            "Responses closely follow the OpenAPI spec with only minor deviations: all major fields present with correct types, structure is correct, naming is mostly consistent",
+            "Responses fully conform to the OpenAPI specification: all fields present with correct types and naming, correct wrapping (e.g. course vs courses key), consistent camelCase, no extraneous fields"
+          ],
+          "extraDescription": "Holistic judgement after running the automated suite and spot-checking responses against assets/module-c/api/ssa-content-service-openapi.yaml. Not a single Jest assertion — complements snapshot tests in 01–07."
+        },
+        {
+          "type": "measurement",
+          "description": "GET /api/courses is accessible without authentication",
+          "maxMark": 0.25,
+          "wsosSection": 5,
+          "extraDescription": "Test: GET /api/courses with no Authorization header. Verify 200 OK (not 401). This endpoint must be public per specification. Automated tests: 02-auth-and-errors.test.cjs › \"All content endpoints...\" (includes public GET /api/courses); 03-course-catalog-and-details.test.cjs › \"GET /api/courses is public...\".",
+          "calculation": { "type": "pass-or-fail" }
+        },
+        {
+          "type": "measurement",
+          "description": "All content endpoints (except health and GET /api/courses) enforce Bearer token authentication",
+          "maxMark": 0.5,
+          "wsosSection": 5,
+          "extraDescription": "Test the following endpoints without an Authorization header, each must return 401: GET /api/courses/:slug, GET /api/courses/:slug/chapters/:id, POST /api/courses/:slug/chapters/:id/quiz/validate, POST /api/courses, PUT /api/courses/:id. Automated test: 02-auth-and-errors.test.cjs › \"All content endpoints (except /health and GET /api/courses) require Bearer token\".",
+          "calculation": { "type": "pass-or-fail" }
+        }
+      ]
+    }
+  ]
+}

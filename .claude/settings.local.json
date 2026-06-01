@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(powershell.exe -ExecutionPolicy Bypass -File \"d:\\\\dev\\\\05_mits\\\\test-project-repos\\\\mits-project-updater-v2\\\\.claude\\\\tools\\\\create-new-project-repository\\\\create-new-project-repository.ps1\" -RepositoryName \"s17-es2027-hu-r3-module_d-ssa-lms-frontend\")",
+      "Bash(node -e \":*)"
+    ]
+  }
+}
