@@ -13,4 +13,7 @@ coverage/
 *.seed
 *.tgz
 
-project-tasks/
+project-tasks/staging/*
+project-tasks/references/*
+!project-tasks/references/.gitkeep
+!project-tasks/staging/.gitkeep

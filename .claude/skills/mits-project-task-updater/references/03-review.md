@@ -1,9 +1,8 @@
-# Review the project task (optional)
+# Process 3: Review the project task (optional)
 
-Review an updated MITS project task to ensure it complies with all
-standardization requirements in `mits-project-task-creation-guide.md`. This is an
-optional compliance check that can be run after the content update, after the
-marking scheme update, or after both.
+Optional step. Review an updated MITS project task to ensure it complies with all
+standardization requirements in `mits-project-task-creation-guide.md`. Run this
+after Process 1, after Process 2, or after both — only when the user requests it.
 
 ## Input
 

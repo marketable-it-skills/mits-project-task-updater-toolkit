@@ -3,10 +3,11 @@ name: mits-project-task-updater
 description: >-
   Standardize and update MITS project tasks (test projects) in
   project-tasks/staging/, adapted from WorldSkills, EuroSkills, and other skills
-  competitions. Provides two separate processes plus an optional review:
+  competitions. Provides three separate processes:
   (1) update the project CONTENT (project-description.md, metadata.json,
   README.md) per the MITS guide; (2) generate or convert the marking scheme
-  between Excel and JSON. Use this skill automatically whenever the user asks to
+  between Excel and JSON; (3) optional review for compliance and clean up working files.
+  Use this skill automatically whenever the user asks to
   update, standardize, revise, or review a MITS project task or its content, or
   to generate/convert/update a marking scheme - for example "update the project
   content", "standardize this test project", "update the marking scheme", or
@@ -37,7 +38,8 @@ formal structure and formatting requirements in the
 [MITS Project Task Creation Guide](../../guide/mits-project-task-creation-guide.md)
 precisely (Markdown format, defined sections such as Introduction / Requirements
 / Assessment, the `/assets/` and `/marking/` folder layout, and `metadata.json`
-+ marking scheme JSON files). Consistency across all tasks is essential.
+
+- marking scheme JSON files). Consistency across all tasks is essential.
 
 Already-standardized tasks in the `/project-tasks/references/` folder are the
 reference for structure and style. Examples:
@@ -69,19 +71,19 @@ this skill.
 
 ## Processes
 
-This skill provides two **separate, independently-run processes**, plus an
-optional review. Run only the process the user asks for — do **not** chain them
+This skill provides three **separate, independently-run processes**. Run only
+the process the user asks for — do **not** chain them
 automatically. If there is more than one project under `/project-tasks/staging/`,
 ask the user which one to work on.
 
 ```
 Process 1  Update content   standardize ONLY project-description.md, metadata.json, README.md
 Process 2  Marking scheme   generate or convert the marking scheme (json <-> xlsx)
-Review     (optional)        check compliance and produce review.md
+Process 3  Review (optional) check compliance, produce review.md, and clean up working files
 ```
 
 The usual order is content first, then the marking scheme as a separate step,
-but each process is self-contained and can be run on its own.
+then optionally Process 3. Each process is self-contained and can be run on its own.
 
 ### Process 1: Update the project content
 
@@ -98,16 +100,16 @@ convert that Excel file to `marking-scheme.json`. Also supports exporting JSON
 back to Excel, and (as a fallback only) generating a scheme from the project
 description. See [references/02-marking-scheme.md](references/02-marking-scheme.md).
 
-### Review (optional)
+### Process 3: Review (optional)
 
-Check the standardized task for compliance and produce a `review.md` report. Can
-be run after either process. See [references/03-review.md](references/03-review.md).
+Optional compliance check: produce a `review.md` report and clean up working
+files. See [references/03-review.md](references/03-review.md).
 
 ## Bundled scripts
 
-| Script | Purpose |
-| ------ | ------- |
-| `scripts/xlsx-to-json/` | Convert an Excel marking scheme into `marking-scheme.json`. |
+| Script                  | Purpose                                                                 |
+| ----------------------- | ----------------------------------------------------------------------- |
+| `scripts/xlsx-to-json/` | Convert an Excel marking scheme into `marking-scheme.json`.             |
 | `scripts/json-to-xlsx/` | Convert `marking-scheme.json` back into the competition Excel template. |
 
 Both are Node scripts and require a one-time `npm install` in their folder
