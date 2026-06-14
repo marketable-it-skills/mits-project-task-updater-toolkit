@@ -117,6 +117,18 @@ This process updates `project-description.md`, `metadata.json`, and `README.md` 
 Before starting, the project must be in `project-tasks/staging/[project-task-name]/`:
 
 1. Create a repo from the [MITS Project Task Template](https://github.com/marketable-it-skills/mits-project-task-template) and clone it into `project-tasks/staging/[project-task-name]/`. Choose an appropriate repo name using this pattern: `s17-[competition-short-name]-module_[letter]-[short-description]`. Example: `s17-es2025-training-hu-module_b-dynamic-website-with-server-side-rendering`
+
+   Or run from the repo root (requires [GitHub CLI](https://cli.github.com/) logged in to your GitHub account):
+
+   ```powershell
+   cd scripts
+   .\create-staging-repo.ps1
+   ```
+
+   ```bash
+   cd scripts
+   ./create-staging-repo.sh
+   ```
 2. Put the original task in `project-description.md`.
 3. Update `metadata.json` with the following base fields:
 
