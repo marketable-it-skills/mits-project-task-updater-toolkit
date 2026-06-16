@@ -92,7 +92,7 @@ The 5 standard WSOS sections used across modules:
 
 - `type`: Either "measurement" or "judgement"
 - `description`: Clear, concise description of what is being assessed
-- `maxMark`: Point value (can be decimal: 0.25, 0.5, 0.75, 1, 1.5, etc.). The maximumum value is 1.5!
+- `maxMark`: Point value (can be decimal: 0.25, 0.5, 0.75, 1, 1.5, 2.0). The maximum value is 2.0!
 - `wsosSection`: Integer (1-5) indicating which WSOS section this belongs to
 
 **Additional Fields:**
@@ -121,6 +121,7 @@ The 5 standard WSOS sections used across modules:
 - `0.75`: Important features requiring skill
 - `1.0`: Major features or critical functionality
 - `1.5`: Complex features requiring advanced skills
+- `2.0`: Most complex features requiring advanced skills and significant time investment
 
 ### WSOS Section Balance
 
@@ -133,6 +134,25 @@ Aim for balanced distribution across WSOS sections:
 - **Section 5 (Backend)**: 20-30% of total points (backend-heavy modules)
 
 ## Writing Assessment Descriptions
+
+### Progressive aspect layering
+
+Within a feature area, split requirements into **ordered layers** so competitors
+earn partial credit for basic implementation before advanced behaviour:
+
+1. **Core functionality** — does the feature work at all? (e.g. theme toggle
+   switches light/dark; calendar shows a monthly grid with month navigation)
+2. **Expected content or behaviour** — does it show the right data or UI?
+   (e.g. day cells display sequence, name, hours, badges)
+3. **Defaults and startup state** — correct initial view? (e.g. current month on
+   load; current Kanban week selected)
+4. **Persistence and edge cases** — survives reload? (e.g. theme persists;
+   export excludes runtime IDs)
+5. **Polish and filtering** — refinements (e.g. MITS picker filters by type;
+   statistics list only incomplete entries)
+
+Use **separate measurement aspects** for layers that can be tested independently.
+Do not merge "toggle works" and "persists after reload" into one aspect.
 
 ### Measurement Aspects
 
