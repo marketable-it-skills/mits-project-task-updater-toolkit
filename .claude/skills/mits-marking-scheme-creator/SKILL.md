@@ -67,7 +67,7 @@ becomes an individual aspect, so extract them all from the project description.
   - Kanban **board with week navigation** → **current week on startup** → card
     layout details
   - export **downloads JSON** → exported JSON has **no runtime-only IDs**
-  Do not combine these into a single aspect if they can be tested independently.
+    Do not combine these into a single aspect if they can be tested independently.
 - **Categorize each requirement by type:**
   - **Measurement aspects** — binary pass/fail items you can test manually
     (specific API endpoints, expected responses, error codes).
@@ -81,7 +81,10 @@ becomes an individual aspect, so extract them all from the project description.
 **4. Group requirements into a logical hierarchy.** Related requirements group
 into logical categories, and each category becomes a `subCriterion`. The
 groupings below are starting points by module type — treat them as references
-and adapt creatively to the actual task:
+and adapt creatively to the actual task. When grouping, consider a logical
+evaluation order — for example on a webpage: first layout/structure, then
+visual elements of the different parts, then basic functionalities, and finally
+the most advanced functionalities.
 
 - **Static websites** (design implementation, HTML, CSS): Project Structure,
   Content Communication, Visual Design, Technical Implementation.
