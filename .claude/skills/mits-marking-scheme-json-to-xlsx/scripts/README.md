@@ -58,5 +58,6 @@ The script validates before writing and exits non-zero (writing nothing) if any
 | ---- | ---- |
 | `convert-marking-scheme-to-xlsx.js` | CLI implementation |
 | `marking-scheme-xlsx-template.csv` | Flattened reference of the column titles and row layout |
+| `package.json` | Dependency manifest (`xlsx`) |
 | `package-lock.json` | Locked dependency tree for `npm install` |
 | `node_modules/` | Vendored `xlsx` dependency (runs without install) |

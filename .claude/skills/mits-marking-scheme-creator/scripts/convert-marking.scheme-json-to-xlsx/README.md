@@ -45,4 +45,5 @@ One worksheet: header row (exact column titles for import tools), then subcriter
 | ---- | ---- |
 | `convert-marking-scheme-to-xlsx.js` | CLI implementation |
 | `prd.md` | Detailed specification |
+| `package.json` | Dependency manifest (`xlsx`) |
 | `package-lock.json` | Locked dependency tree for `npm install` |
