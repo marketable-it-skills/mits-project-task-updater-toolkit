@@ -1,10 +1,18 @@
 # Marking Scheme Creation Guideline
 
-This guideline provides standards and best practices for creating marking schemes for EuroSkills competition modules, based on analysis of existing marking schemes.
+This guideline provides standards and best practices for creating marking schemes for EuroSkills / WorldSkills-style competition modules, based on analysis of existing marking schemes.
 
 ## Overview
 
 Marking schemes are JSON files that define assessment criteria, point distributions, and evaluation methods for competition modules. They follow the WSOS (WorldSkills Occupational Standards) framework with 5 core sections.
+
+**Module types vs competition letters.** Schemes and patterns are organised by
+**stable module types** (`static`, `dynamic`, `rest-api-backend`,
+`rest-api-frontend`, `interactive-frontend`, `mini`). Competition day labels
+(Module A/B/C…) are **event-specific**: their order and meaning change
+competition by competition. Never infer a technology stack from the letter
+alone. Derive the type from `metadata.json`, the project description, and folder
+naming (e.g. `…-rest-api-frontend`).
 
 ## JSON Structure Requirements
 
@@ -105,12 +113,14 @@ The 5 standard WSOS sections used across modules:
 
 ### Typical Total Points by Module Type
 
-- **Static Website**: 18 points
-- **Dynamic Website**: 18 points
-- **REST API Backend**: 18 points
-- **REST API Frontend**: 18 points
-- **Interactive Frontend**: 18 points
-- **Mini Test Projects"**: 10 point
+These are **typical** totals (aligned with `--module-type` on the validator), not hard caps. The project description or author may specify a different total when the task needs finer aspects.
+
+- **`static`**: 18 points
+- **`dynamic`**: 18 points
+- **`rest-api-backend`**: 18 points
+- **`rest-api-frontend`**: 18 points
+- **`interactive-frontend`**: 18 points
+- **`mini`**: 10 points
 
 ### Point Value Standards
 
@@ -125,13 +135,19 @@ The 5 standard WSOS sections used across modules:
 
 ### WSOS Section Balance
 
-Aim for balanced distribution across WSOS sections:
+Aim for balanced distribution across WSOS sections (**recommended bands**):
 
 - **Section 1 (Work Organization)**: 10-15% of total points
 - **Section 2 (Communication)**: 5-10% of total points
 - **Section 3 (Design)**: 25-35% of total points
 - **Section 4 (Frontend)**: 30-40% of total points
 - **Section 5 (Backend)**: 20-30% of total points (backend-heavy modules)
+
+**Honesty over forced balance.** Map aspects to the section that describes what
+they actually test. For **client-only** modules, omit Section 5; Section 4
+often exceeds 40% on feature-dense SPAs — that is acceptable and may surface as
+a validator WARN. Do **not** reclassify create/submit/API-integration behaviour
+as Section 3 solely to hit the Frontend band.
 
 ## Writing Assessment Descriptions
 
@@ -153,6 +169,8 @@ earn partial credit for basic implementation before advanced behaviour:
 
 Use **separate measurement aspects** for layers that can be tested independently.
 Do not merge "toggle works" and "persists after reload" into one aspect.
+**One behaviour per aspect** — if the text needs “and” for two independent
+checks, split them.
 
 ### Measurement Aspects
 
@@ -162,6 +180,7 @@ Do not merge "toggle works" and "persists after reload" into one aspect.
 - Specify exact requirements
 - Include technical details in `extraDescription`
 - Focus on objective, verifiable criteria
+- Spell Network / throttle / tab-hide steps when the mark depends on them
 
 **Examples:**
 
@@ -217,54 +236,97 @@ Do not merge "toggle works" and "persists after reload" into one aspect.
 ### Structure Validation
 
 - [ ] Total points add up correctly across all aspects
-- [ ] All WSOS sections are represented appropriately
+- [ ] WSOS sections used are appropriate for the module type (omit S5 when client-only)
 - [ ] JSON syntax is valid
 - [ ] Required fields are present for all aspects
+- [ ] Mark distribution table in the project description matches final WSOS totals
 
 ### Content Quality
 
 - [ ] Descriptions are clear and unambiguous
 - [ ] Assessment criteria are objective and measurable
+- [ ] **One behaviour per aspect** (no double-barrel “X and Y” measurements)
 - [ ] Point values reflect relative importance
 - [ ] Judgement levels show clear progression
 - [ ] Technical requirements are specific
+- [ ] Hard-to-observe tests include exact assessor steps in `extraDescription`
+
+### Coverage Audit
+
+- [ ] Main workflows and challenge features from the project description are marked
+- [ ] Error-handling table rows are represented (401/404/422/network, duplicate submit, cleanup/stale where required)
+- [ ] Design / accessibility / responsive requirements are covered without stealing Front-End points into Design dishonestly
 
 ### Module Alignment
 
+- [ ] Module type identified from metadata/folder/description — not from competition letter alone
 - [ ] Criteria match module learning objectives
-- [ ] Point distribution reflects module complexity
+- [ ] Point distribution reflects module complexity (total may differ from “typical 18”)
 - [ ] Assessment covers all key competencies
 - [ ] Difficulty level appropriate for competition timeframe
+- [ ] Sub-criterion order matches assessor walk-order for the module type
+
+## Anti-patterns
+
+Avoid these recurring failures:
+
+- **Double-barrel aspects** — one measurement that packs two independent pass/fail checks (“loading and retry and required selection”).
+- **Structure-first for SPAs** — forcing routing/structure as the first sub-criterion when assessors already navigate those routes while marking workflows; put routing as a late confirmation pass unless the task is static markup.
+- **Padding Section 3** — classifying create/submit/API behaviour as Design solely to satisfy Frontend % bands.
+- **Challenge-only schemes** — over-weighting novel features while leaving the project description’s error-handling and cleanup rows unmarked.
+- **Assuming “Module B” means a fixed stack** — competition letters are event-specific; use module types.
+- **Duplicated depth** — fully marking polling/journey on the authenticated surface and again at full depth on a public track page; keep the secondary surface thin.
 
 ## Common Patterns by Module Type
 
-### Static Website Modules (Module A)
+### `static`
 
 - Focus on HTML/CSS standards compliance
 - Responsive design across multiple viewports
 - Accessibility and SEO considerations
-- File organization and project structure
+- File organization and project structure (structure early is appropriate)
 
-### Dynamic Website Modules (Module B)
+### `dynamic`
 
 - Server-side rendering implementation
 - Database design and integration
 - Authentication and security measures
 - Administrative interface functionality
 
-### API Modules (Module C)
+### `rest-api-backend`
 
 - Authentication token handling
 - Error response specifications
 - Database operations and integrity
 - External service integration
 
-### Interactive Frontend Modules (Module D)
+### `rest-api-frontend`
 
-- Single Page Application routing
-- Real-time features and polling
+- Passenger/consumer SPA against a provided API
+- Auth session, route guards, workflow screens
+- Advanced client behaviour: URL state, stale responses, polling
+- Assessor order tip: workflows → public surfaces → routing confirmation → design
+
+### `interactive-frontend`
+
+- Client-only app or game prototype (may not use a REST API)
+- Core interaction loops and data handling
+- Real-time or timer-driven behaviour where specified
 - Error handling and user feedback
-- Advanced UI interactions
+
+### `mini`
+
+- Smaller total (typically 10); fewer, sharper aspects
+- Still one behaviour per aspect and clear test steps
+
+### Worked `rest-api-frontend` split examples
+
+Prefer fine splits like:
+
+- Confirmation modal: **summary + copyable reference** | **Create new claim resets wizard** | **Show my claims / dismiss navigates**
+- Polling: **~15s interval** | **no overlapping requests** | **pause when hidden / refresh when visible** | **stop on terminal statuses**
+- Claims URL workspace: **query stores status + page** | **reload/back/forward restore** | **status change resets to page 1**
+- Terminals: **loading state** | **error + Retry** | **cannot continue without successful selection**
 
 ## Examples from Reference Schemes
 
@@ -306,9 +368,11 @@ When creating marking schemes, validate using:
 
 1. JSON syntax validators
 2. Point total calculators
-3. WSOS distribution analysis
+3. WSOS distribution analysis (bands are advisory; honesty first)
 4. Peer review with other module creators
 5. Test implementation with sample submissions
+6. The bundled script:
+   `node .claude/skills/mits-marking-scheme-creator/scripts/validate-marking-scheme.js marking/marking-scheme.json --module-type=<type>`
 
 ---
 

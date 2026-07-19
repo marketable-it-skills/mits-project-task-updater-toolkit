@@ -35,6 +35,12 @@ Work through the five phases below in order.
 - Review the files in the `assets/` folder for additional requirements, content
   specifications, or visual guidelines.
 - Check `metadata.json` for the module type, duration, and point totals.
+- **Identify the module type** from `metadata.json`, the project description, and
+  folder naming (e.g. `…-rest-api-frontend`). Use stable types:
+  `static`, `dynamic`, `rest-api-backend`, `rest-api-frontend`,
+  `interactive-frontend`, `mini`. **Do not** map competition day labels
+  (Module A/B/C…) to a technology stack — those letters are event-specific and
+  change competition by competition.
 
 **2. Study the reference framework.**
 
@@ -42,8 +48,8 @@ Work through the five phases below in order.
   for structure and standards.
 - Analyze marking schemes from previously created project tasks in the
   `/project-tasks` folder. Each project folder keeps its scheme in
-  `marking/marking-scheme.json`. Find the tasks whose module type matches the
-  current one and use their schemes as references — this keeps scope, point
+  `marking/marking-scheme.json`. Find the tasks whose **module type** matches
+  the current one and use their schemes as references — this keeps scope, point
   values, and structure consistent across the task library.
 
 ---
@@ -55,6 +61,10 @@ becomes an individual aspect, so extract them all from the project description.
 
 - **Prioritize manual testing.** Favor functionality you can verify through
   direct manual testing.
+- **One behaviour per aspect.** If `description` or `extraDescription` needs
+  “and” for two independently testable checks, split them. Use standard point
+  values (0.25, 0.5, 0.75, 1.0, 1.5, 2.0) when dividing a budget across the
+  split.
 - **Break down complex tasks.** Split complex functionality into smaller,
   granular aspects so a competitor who struggles with one hard task doesn't lose
   all the related points at once.
@@ -67,6 +77,13 @@ becomes an individual aspect, so extract them all from the project description.
   - Kanban **board with week navigation** → **current week on startup** → card
     layout details
   - export **downloads JSON** → exported JSON has **no runtime-only IDs**
+  - SPA wizard: **step shell** → **async prerequisites** (e.g. terminal loading)
+    → **step validation** → **draft/score** → **create** → **confirmation
+    actions**
+  - claims list: **fields/links** → **URL query** → **history restore** →
+    **page reset on filter** → **stale-response race**
+  - claim detail: **fields** → **withdraw layers** → **poll interval** → **no
+    overlap** → **visibility pause** → **stop on terminal status**
     Do not combine these into a single aspect if they can be tested independently.
 - **Categorize each requirement by type:**
   - **Measurement aspects** — binary pass/fail items you can test manually
@@ -76,31 +93,49 @@ becomes an individual aspect, so extract them all from the project description.
 - **Avoid generic criteria.** Replace vague aspects like "input validation" with
   specific, testable scenarios.
 - Review for overlapping items and consolidate duplicates, while preserving
-  genuinely distinct evaluation criteria.
+  genuinely distinct evaluation criteria. Prefer a **thin** public/shared aspect
+  when the same behaviour is already fully marked on the primary surface (e.g.
+  public “same polling” vs a full authenticated polling suite).
 
 **4. Group requirements into a logical hierarchy.** Related requirements group
 into logical categories, and each category becomes a `subCriterion`. The
-groupings below are starting points by module type — treat them as references
-and adapt creatively to the actual task. When grouping, consider a logical
-evaluation order — for example on a webpage: first layout/structure, then
-visual elements of the different parts, then basic functionalities, and finally
-the most advanced functionalities.
+groupings below are starting points by **module type** — treat them as
+references and adapt creatively to the actual task.
 
-- **Static websites** (design implementation, HTML, CSS): Project Structure,
-  Content Communication, Visual Design, Technical Implementation.
-- **Dynamic websites** (SSR, admin interface): Database Design,
-  Authentication/Security, Administrative Interface, Server-Side Rendering.
-- **REST API backend**: Authentication, API Endpoints, Error Handling, External
-  Integration.
-- **REST API interactive frontend**: Frontend Design, User Interface, API
-  Integration, Advanced Features.
-- **Non-REST API interactive frontend** (e.g. a JS game, web app prototype):
-  Layout, Data Handling, User Experience, Clean Code.
+**Assessor walk-order (sub-criteria):** Prefer the order assessors will mark in,
+not only “foundational first” on paper.
 
-Order the `subCriterions` from foundational to advanced
-(structure → functionality → quality). Within each `subCriterion`, list
-aspects in the same order: **basic implementation first, then persistence,
-defaults, filtering, and polish**.
+- **Default for behavioural / SPA tasks:** workflows first (auth → core features
+  → advanced client behaviour → public surfaces), then **cross-cutting SPA
+  structure/routing as a confirmation pass** (routes and guards are usually
+  already exercised), then **design / UX / accessibility** last.
+- **Exception:** Keep structure early when the task is mostly static HTML/CSS
+  with little behavioural flow.
+
+Within each `subCriterion`, still list aspects progressively: **basic
+implementation first, then persistence, defaults, filtering, and polish**. Put
+prerequisites before dependent behaviour (e.g. terminal loading before claim
+submit / confirmation modal).
+
+Starting templates by module type:
+
+- **`static`**: Project Structure, Content Communication, Visual Design,
+  Technical Implementation (structure early is fine).
+- **`dynamic`**: Database Design, Authentication/Security, Administrative
+  Interface, Server-Side Rendering.
+- **`rest-api-backend`**: Authentication, API Endpoints, Error Handling,
+  External Integration.
+- **`rest-api-frontend`** (typical assessor order):
+  1. Authentication and session
+  2. Registration and profile (if in scope)
+  3. Core feature workflows (wizards/lists/detail)
+  4. Advanced client behaviour (URL state, races, polling)
+  5. Public/unauthenticated surfaces
+  6. SPA structure and routing (confirmation)
+  7. Design, UX, accessibility
+- **`interactive-frontend`**: Data Handling / core play or UI flows, Advanced
+  behaviour, then structure/clean code and design as confirmation / qualitative
+  wrap-up.
 
 ---
 
@@ -121,12 +156,18 @@ WSOS section (1–5):
   and data integrity to Section 4 instead, and omit Section 5 from the mark
   distribution table.
 
+**Map honestly.** Do not reclassify front-end behaviour as Section 3 only to
+hit percentage bands. For client-only SPAs, Section 4 above the recommended
+band is expected; treat the validator WARN as advisory.
+
 **6. Distribute points strategically.**
 
 - **Total points.** Check the "Mark distribution" section of
   `project-description.md` first. If it isn't there, ask the user for the total.
-  Module totals are guidelines (often 18); a project may specify a different
-  total (e.g. 21) when the task scope warrants more granular aspects.
+  **Typical** module totals are often 18; that is a guideline, not a hard cap.
+  A project may specify a different total (e.g. 22 or 33) when the task scope
+  warrants more granular aspects. The project-description / user-specified total
+  wins.
 - **Weight each aspect 1–10** based on:
   - complexity and skill level required,
   - time investment needed,
@@ -134,8 +175,10 @@ WSOS section (1–5):
   - learning-objective importance.
 - **Allocate points** proportionally to those weights.
 - **Use standard point values:** 0.25, 0.5, 0.75, 1.0, 1.5, 2.0.
-- **Balance the WSOS sections** so points are distributed across them per the
-  recommended percentages in the guideline.
+- **Balance WSOS sections** using the guideline’s recommended percentages as a
+  target, not a mandate to mis-label aspects.
+- After final totals, **sync the Mark distribution table** in
+  `project-description.md` and `project-description_HU.md` when present.
 
 ---
 
@@ -154,8 +197,17 @@ WSOS section (1–5):
   actionable level descriptions.
 - **Language.** Use precise, unambiguous terminology that assessors can apply
   consistently through direct testing.
-- **Completeness.** Verify that all project requirements are covered, with no
-  gaps.
+- **Completeness — coverage audit.** Check the scheme against the project
+  description for gaps (challenge features are easy to over-weight while globals
+  are missed):
+  - Auth/session, guards/routes, main CRUD/workflows
+  - Every challenge paragraph (drafts, quality scores, races, polling, etc.)
+  - Error-handling table rows (401/404/422/network, duplicate submit,
+    stale/cleanup)
+  - Design / accessibility / responsive
+- **Assessor markability.** Each aspect should be verifiable in under ~2 minutes.
+  If Network panel, throttling, or tab-hide is required, spell exact steps in
+  `extraDescription`. Avoid double-barrel “X and Y” measurements.
 - **Straightforward marking.** Each aspect should be quick to evaluate by simply
   following its test instructions.
 
@@ -163,7 +215,8 @@ WSOS section (1–5):
 
 - Verify the JSON structure matches the required schema.
 - Confirm the total points sum correctly across all aspects.
-- Check that the WSOS distribution follows the recommended percentages.
+- Check that the WSOS distribution is honest; review guideline-band WARNINGs but
+  do not invent Design marks from Front-End behaviour.
 - Validate that point values align with complexity and module standards.
 
 ---
@@ -193,13 +246,16 @@ standard format:
 
 **10. Validate and finalize.**
 
+- Workflow: **write → validate → rebalance → sync mark tables**.
 - Run the validator script (see below) and resolve every error it reports.
+- Treat WSOS-band and “typical total” warnings as advisory; fix where it makes
+  sense without dishonest section mapping.
+- When the user raises one aspect’s `maxMark`, **default to splitting** into
+  one-behaviour aspects that sum to the new budget — do not keep a composite.
+- Prefer assessor walk-order for SPA/behavioural tasks (routing near the end as
+  confirmation). Adjust after review if the user prefers a different order.
 - Cross-check against similar reference schemes for consistency.
-- Verify the scheme covers all project deliverables.
-- Confirm complex tasks are split into smaller aspects to prevent total point
-  loss.
-- Confirm each aspect can be evaluated quickly and objectively.
-- Ensure the point distribution reflects the project's priorities.
+- Verify the scheme covers all project deliverables (re-run the coverage audit).
 - Confirm an assessor could use the scheme to evaluate a real submission through
   direct functional testing.
 
@@ -245,6 +301,8 @@ recommended percentage band) — review them and fix where it makes sense.
   interpretation.
 - Include clear aspect descriptions that remove assessor ambiguity.
 - Follow all formatting and content standards from the guideline document.
+- Sync Mark distribution tables in the project description(s) to the final WSOS
+  totals.
 
 ## Key principles for a manual-testing focus
 
@@ -252,8 +310,11 @@ recommended percentage band) — review them and fix where it makes sense.
    credentials", not "Authentication system validates users".
 2. **Testable instructions** — put exact test steps in the `extraDescription`
    field.
-3. **Granular breakdown** — split complex features into 3–5 smaller aspects.
+3. **Granular breakdown** — split complex features into 3–5 smaller aspects;
+   one behaviour per aspect.
 4. **Progressive layering** — mark whether a feature works before marking
    persistence, defaults, or advanced behaviour on top of it.
 5. **Functional verification** — prioritize what works over how it's coded.
 6. **Quick assessment** — every aspect should be verifiable in under 2 minutes.
+7. **Assessor walk-order** — for SPA tasks, mark workflows before a routing
+   confirmation pass and design judgements.
