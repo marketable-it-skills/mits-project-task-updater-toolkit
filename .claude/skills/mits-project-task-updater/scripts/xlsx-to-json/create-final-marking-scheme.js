@@ -2,9 +2,10 @@ const fs = require("fs");
 
 // Read the structured data
 const data = JSON.parse(
-  fs.readFileSync("marking-scheme-structured.json", "utf8")
+  fs.readFileSync("marking-scheme-structured.json", "utf8"),
 );
 const sheetData = data.data;
+const calculationSheetData = data.calculationData;
 
 // Parse WSOS sections (rows 4-10)
 const wsosSections = {};
@@ -79,9 +80,65 @@ for (let i = 12; i < sheetData.length; i++) {
 
       // Add calculation based on type
       if (aspect.type === "measurement") {
-        aspect.calculation = {
-          type: "pass-or-fail",
-        };
+        // Check if the aspect has a calculation
+        if (row[9]) {
+          const calculationRow = calculationSheetData[parseInt(row[9]) - 1];
+          const calculationType = calculationRow[1];
+
+          const calculationParams = {};
+          for (const param of calculationRow[3].split("#-#")) {
+            const pieces = param.split(":::");
+
+            const values = pieces[1].split("#x~x#");
+            if (values[0] !== "") {
+              // Number value
+              calculationParams[pieces[0]] = parseFloat(values[0]);
+            } else {
+              // String value
+              calculationParams[pieces[0]] = values[1];
+            }
+          }
+
+          switch (calculationType) {
+            case "NUMBER_COMPLETED":
+              aspect.calculation = {
+                type: "number-completed",
+                numberPossible: calculationParams["NUM_POSSIBLE"] ?? 3,
+              };
+              break;
+            case "CHOICE":
+              aspect.calculation = {
+                type: "choice",
+                deductionType:
+                  calculationParams["DEDUCTION_TYPE"] === "UNIT"
+                    ? "unit"
+                    : "percent",
+                choices: Array((Object.keys(calculationParams).length - 1) / 2)
+                  .fill()
+                  .map((_, i) => ({
+                    label:
+                      calculationParams[`CHOICE${i + 1}_LABEL`] ??
+                      `Choice ${i + 1}`,
+                    deduction:
+                      parseFloat(
+                        calculationParams[`CHOICE${i + 1}_DEDUCTION`],
+                      ) ?? 0,
+                  })),
+              };
+              break;
+            default:
+              // Invalid or unsupported calculation type, fall back to pass-or-fail
+              aspect.calculation = {
+                type: "pass-or-fail",
+              };
+              break;
+          }
+        } else {
+          // No calculation found, add default pass-or-fail
+          aspect.calculation = {
+            type: "pass-or-fail",
+          };
+        }
       } else {
         // For judgement, we'll collect the score descriptions from following rows
         aspect.judgementScoreDescription = [];
@@ -135,7 +192,7 @@ const markingScheme = {
 // Save the marking scheme
 fs.writeFileSync(
   "new-marking-scheme.json",
-  JSON.stringify(markingScheme, null, 2)
+  JSON.stringify(markingScheme, null, 2),
 );
 
 console.log("\nFinal marking scheme saved to new-marking-scheme.json");
@@ -145,12 +202,12 @@ console.log("Sub-criteria found:", subCriterions.length);
 subCriterions.forEach((criterion, index) => {
   const totalAspectMarks = criterion.aspects.reduce(
     (sum, aspect) => sum + aspect.maxMark,
-    0
+    0,
   );
   console.log(
     `${index + 1}. ${criterion.name}: ${
       criterion.aspects.length
-    } aspects, ${totalAspectMarks} marks`
+    } aspects, ${totalAspectMarks} marks`,
   );
 
   // Show judgement criteria details

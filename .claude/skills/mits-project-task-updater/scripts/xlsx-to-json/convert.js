@@ -52,11 +52,17 @@ try {
     (name) =>
       name.toLowerCase().includes("marking") ||
       name.toLowerCase().includes("scheme") ||
-      name === sheetNames[0]
+      name === sheetNames[0],
+  );
+
+  const calculationSheetName = sheetNames.find(
+    (name) =>
+      name.toLowerCase().includes("calculation") || name === sheetNames[1],
   );
 
   if (mainSheetName) {
     const mainSheet = result[mainSheetName];
+    const calculationSheet = result[calculationSheetName] ?? [];
     console.log(`\nProcessing main sheet: ${mainSheetName}`);
 
     // Save structured data for manual review
@@ -66,6 +72,7 @@ try {
         {
           sheetName: mainSheetName,
           data: mainSheet,
+          calculationData: calculationSheet,
           analysis: {
             totalRows: mainSheet.length,
             columns: mainSheet[0] || [],
@@ -73,8 +80,8 @@ try {
           },
         },
         null,
-        2
-      )
+        2,
+      ),
     );
 
     console.log("Structured data saved to marking-scheme-structured.json");
