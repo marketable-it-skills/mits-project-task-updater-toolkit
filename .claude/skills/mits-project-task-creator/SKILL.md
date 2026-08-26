@@ -8,10 +8,11 @@ description: >-
   cloning the template or polishing form. Use this skill whenever the user asks
   to create, author, draft, or write a new project task / test project from
   scratch or from a prompt brief — for example "create a project task for…",
-  "draft a new Module B task", or "write the project description for this
-  training module". Do not use for adapting an existing competition module
-  (mits-project-task-updater) or for creating only a marking scheme
-  (mits-marking-scheme-creator).
+  "draft a new Module B task", "write the project description for this
+  training module", or create Module A mini speed test projects in Design
+  Implementation, Front-end Development, or Back-end Development. Do not use
+  for adapting an existing competition module (mits-project-task-updater) or
+  for creating only a marking scheme (mits-marking-scheme-creator).
 ---
 
 # MITS Create Project Task
@@ -152,6 +153,13 @@ Prefer matching headers from the creation guide so the updater has less to fix.
 If the brief’s natural structure conflicts with the guide, preserve content
 clarity first and keep section names as close as practical.
 
+**Module A mini speed Test Projects:** if the brief is a mini project (or a
+set of them) under Design Implementation, Front-end Development, or Back-end
+Development, read
+[references/mini-test-project-categories.md](references/mini-test-project-categories.md)
+and put each mini Test Project in **exactly one** category. Match tech
+constraints, assets, and assessment to that category.
+
 ### 6. Update `metadata.json` and `README.md`
 
 **`metadata.json`**
@@ -208,4 +216,5 @@ Briefly report:
 ## Reference guides
 
 - [Content structure (MITS-aligned)](references/content-structure.md)
+- [Module A mini Test Project categories](references/mini-test-project-categories.md)
 - [MITS Project Task Creation Guide](../../guide/mits-project-task-creation-guide.md)

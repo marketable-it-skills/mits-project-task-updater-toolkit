@@ -1,3 +1,4 @@
+.agents/
 node_modules/
 dist/
 build/
@@ -15,5 +16,6 @@ coverage/
 
 project-tasks/staging/*
 project-tasks/references/*
+project-tasks/done/*
 !project-tasks/references/.gitkeep
 !project-tasks/staging/.gitkeep

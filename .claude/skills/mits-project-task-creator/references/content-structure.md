@@ -55,6 +55,12 @@ Full guide: `/.claude/guide/mits-project-task-creation-guide.md`.
 **Requirements** — detailed, testable instructions. Prefer concrete behaviour over
 vague goals. Group by feature or page with `###` headings.
 
+For **Module A mini speed Test Projects**, group Requirements as
+`### Design Implementation`, `### Front-end Development`, and
+`### Back-end Development`. Put each mini project in exactly one of those
+headings. Category definitions and alignment rules:
+[mini-test-project-categories.md](mini-test-project-categories.md).
+
 **Assessment** — tools/methods if known (browsers, validators, manual testing).
 If unknown, state that assessment follows the marking scheme / expert judgement.
 
