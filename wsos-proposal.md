@@ -1,11 +1,12 @@
 # WSOS section proposals (WSC2026 TD17 §2.2)
 
-Proposed revised text for WorldSkills Occupational Standards sections 1–3, informed by marking aspects collected from `project-tasks/references` (`wsos1.md`, `wsos2.md`, `wsos3.md`).
+Proposed revised text for WorldSkills Occupational Standards sections 1–4, informed by marking aspects collected from `project-tasks/references` (`wsos1.md`, `wsos2.md`, `wsos3.md`, `wsos4.md`).
 
 Basis:
 - WSOS 1: 39 aspects / 17 projects — delivery, structure, constraints, git
 - WSOS 2: 62 aspects / 19 projects — HTTP/UI errors, specs, diagrams, docs
 - WSOS 3: 162 aspects / 22 projects — layout, content presentation, responsiveness, W3C/a11y/SEO
+- WSOS 4: 359 aspects / 15 projects — client interactivity, SPA/PWA, API-driven UI, browser state
 
 ---
 
@@ -68,3 +69,25 @@ The individual shall be able to:
 - Create interfaces that conform to W3C HTML/CSS expectations and accessibility guidelines when required
 - Use CSS or other external styling to control appearance, including animations or interactive visual effects when specified
 - Support discoverability and clarity of content (e.g. SEO-related presentation) where the brief requires it
+
+---
+
+## 4 Front-end development — 25%
+
+The individual needs to know and understand:
+- ECMAScript (JavaScript) for interactive web interfaces
+- How to integrate libraries, frameworks, components, and other client-side systems
+- How client applications consume APIs and manage asynchronous UI state (loading, progress, errors)
+- Browser capabilities relevant to the product (e.g. routing, storage, offline behaviour, notifications, installability)
+- Coding practices for modular, reusable front-end code, including troubleshooting and automated testing when required
+
+The individual shall be able to:
+- Create and update JavaScript (or framework) behaviour that implements the required interactive functionality
+- Render and update interface elements and media in response to user actions and application state
+- Implement client-side application structure such as SPA routing and reusable components or modules when specified
+- Consume APIs from the client (including auth/token handling) and present results, progress, and empty or disabled states correctly
+- Manage browser-side state as required (e.g. persistence, offline/cached content, background updates, notifications)
+- Manipulate graphical and content elements dynamically according to the brief
+- Use open-source JavaScript libraries or frameworks appropriately when allowed
+- Write modular, reusable front-end code and handle client-side errors through debugging and fixes
+- Write and run automated front-end tests when required by the task
