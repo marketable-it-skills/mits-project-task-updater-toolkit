@@ -1,16 +1,17 @@
-# WSOS section proposals (WSC2026 TD17 §2.2)
+﻿# WSOS section proposals (WSC2026 TD17 §2.2)
 
-Proposed revised text for WorldSkills Occupational Standards sections 1–4, informed by marking aspects collected from `project-tasks/references` (`wsos1.md`, `wsos2.md`, `wsos3.md`, `wsos4.md`).
+Proposed revised text for WorldSkills Occupational Standards sections 1–5, informed by marking aspects collected from `project-tasks/references` (`wsos1.md`, `wsos2.md`, `wsos3.md`, `wsos4.md`, `wsos5.md`).
 
 Basis:
-- WSOS 1: 39 aspects / 17 projects — delivery, structure, constraints, git
-- WSOS 2: 62 aspects / 19 projects — HTTP/UI errors, specs, diagrams, docs
-- WSOS 3: 162 aspects / 22 projects — layout, content presentation, responsiveness, W3C/a11y/SEO
-- WSOS 4: 359 aspects / 15 projects — client interactivity, SPA/PWA, API-driven UI, browser state
+- WSOS 1: 39 aspects / 17 projects - delivery, structure, constraints, git
+- WSOS 2: 62 aspects / 19 projects - HTTP/UI errors, specs, diagrams, docs
+- WSOS 3: 162 aspects / 22 projects - layout, content presentation, responsiveness, W3C/a11y/SEO
+- WSOS 4: 359 aspects / 15 projects - client interactivity, SPA/PWA, API-driven UI, browser state
+- WSOS 5: 477 aspects / 18 projects - APIs, auth, database, SSR, business rules, backend tests
 
 ---
 
-## 1 Work organization and management — 5%
+## 1 Work organization and management - 5%
 
 The individual needs to know and understand:
 - How project structure, file organisation, and naming affect maintainability and assessment
@@ -29,7 +30,7 @@ The individual shall be able to:
 
 ---
 
-## 2 Communication and interpersonal skills — 5%
+## 2 Communication and interpersonal skills - 5%
 
 The individual needs to know and understand:
 - How written specifications and client requirements define expected behaviour and contracts
@@ -48,7 +49,7 @@ The individual shall be able to:
 
 ---
 
-## 3 Design implementation — 25%
+## 3 Design implementation - 25%
 
 The individual needs to know and understand:
 - Design principles and patterns for hierarchy, typography, aesthetics, composition, and usable interfaces
@@ -72,7 +73,7 @@ The individual shall be able to:
 
 ---
 
-## 4 Front-end development — 25%
+## 4 Front-end development - 25%
 
 The individual needs to know and understand:
 - ECMAScript (JavaScript) for interactive web interfaces
@@ -91,3 +92,27 @@ The individual shall be able to:
 - Use open-source JavaScript libraries or frameworks appropriately when allowed
 - Write modular, reusable front-end code and handle client-side errors through debugging and fixes
 - Write and run automated front-end tests when required by the task
+
+---
+
+## 5 Back-end development - 40%
+
+The individual needs to know and understand:
+- Server-side programming with PHP and/or Node.js (or other allowed stacks)
+- How to design and implement databases, including data types, keys, relationships, and normalisation where required
+- How to manage data exchange between server and client systems through APIs and/or server-rendered interfaces
+- Authentication, authorisation, sessions/tokens, and common web application security practices
+- Software design patterns suitable for server applications (e.g. modular structure, MVC where applicable)
+- Coding practices including troubleshooting and automated testing for back-end implementation
+
+The individual shall be able to:
+- Implement server-side features and API endpoints that meet the specification (methods, paths, payloads, side effects)
+- Create or use database structures and persist data correctly according to system requirements
+- Enforce authentication and authorisation rules (e.g. required tokens, roles, quotas, ownership checks)
+- Implement business rules and server-side validation (e.g. billing, limits, booking or enrollment constraints)
+- Build server-rendered pages and form handling when required, including session and CSRF protection where specified
+- Integrate with provided libraries, frameworks, APIs, file storage, or other server services as required
+- Protect against common security exploits relevant to the task
+- Create modular, reusable server-side code and handle errors through debugging and fixes
+- Write and run automated back-end tests when required (including coverage targets where specified)
+- Configure and operate the application on the provided server environment as needed for correct backend behaviour
